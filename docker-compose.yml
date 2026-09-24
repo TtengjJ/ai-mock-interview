@@ -1,0 +1,116 @@
+services:
+  mysql:
+    image: mysql:8.0.33
+    container_name: aigi-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-123456}
+      MYSQL_DATABASE: interview_guide
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"  # 本机若已有 mysqld 占用 3306，则映射到 3307
+    volumes:
+      - aigi_mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+      - ./docs/sql/demo-seed.sql:/docker-entrypoint-initdb.d/10-demo-seed.sql:ro
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=caching_sha2_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p123456"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  redis:
+    image: redis:7
+    container_name: aigi-redis
+    command: ["redis-server", "--requirepass", "redis"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - aigi_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  minio:
+    image: minio/minio
+    container_name: aigi-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - aigi_minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  createbuckets:
+    image: minio/mc
+    container_name: aigi-minio-init
+    depends_on:
+      minio:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c "
+      sleep 3;
+      mc alias set local http://minio:9000 minioadmin minioadmin;
+      mc mb -p local/interview-guide || true;
+      mc anonymous set download local/interview-guide || true;
+      exit 0;
+      "
+
+  # 可选：一并启动后端（需先配置 AI_API_KEY）
+  # 仅起依赖：docker compose up -d mysql redis minio createbuckets
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: aigi-backend
+    profiles: ["full"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_started
+      createbuckets:
+        condition: service_completed_successfully
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: interview_guide
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-123456}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis}
+      APP_STORAGE_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      APP_STORAGE_BUCKET: interview-guide
+      AI_BASE_URL: ${AI_BASE_URL:-https://dashscope.aliyuncs.com/compatible-mode}
+      AI_API_KEY: ${AI_API_KEY:-sk-placeholder}
+      AI_MODEL: ${AI_MODEL:-qwen-plus}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:5174}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      ADMIN_REAL_NAME: ${ADMIN_REAL_NAME:-系统管理员}
+
+volumes:
+  aigi_mysql_data:
+  aigi_redis_data:
+  aigi_minio_data:
