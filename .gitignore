@@ -1,0 +1,16 @@
+.env
+.env.local
+!.env.example
+backend/.env
+!backend/.env.example
+*.log
+.DS_Store
+.idea/
+*.iml
+backend/.gradle/
+backend/build/
+backend/target/
+admin-web/node_modules/
+user-web/node_modules/
+admin-web/dist/
+user-web/dist/

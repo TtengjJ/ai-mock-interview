@@ -1,0 +1,33 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f7fa;
+  color: #303133;
+}
+
+.page-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.empty-hint {
+  color: #909399;
+  text-align: center;
+  padding: 48px 0;
+}
