@@ -4,6 +4,7 @@ import interview.guide.common.exception.BusinessException;
 import interview.guide.common.exception.ErrorCode;
 import interview.guide.modules.admin.model.AdminDtos.JobRequest;
 import interview.guide.modules.admin.model.AdminDtos.JobResponse;
+import interview.guide.modules.admin.model.InterviewerConfigEntity;
 import interview.guide.modules.admin.model.JobEntity;
 import interview.guide.modules.admin.repository.InterviewerConfigRepository;
 import interview.guide.modules.admin.repository.JobRepository;
@@ -11,7 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +27,14 @@ public class JobAdminService {
   private final InterviewerConfigRepository interviewerConfigRepository;
 
   public List<JobResponse> list() {
-    return jobRepository.findAll().stream().map(this::toResponse).toList();
+    List<JobEntity> all = jobRepository.findAll();
+    Map<Long, String> interviewerNames = loadInterviewerNames(all);
+    return all.stream().map(e -> toResponse(e, interviewerNames)).toList();
   }
 
   public JobResponse get(Long id) {
-    return toResponse(findOrThrow(id));
+    JobEntity entity = findOrThrow(id);
+    return toResponse(entity, loadInterviewerNames(List.of(entity)));
   }
 
   @Transactional
@@ -38,7 +47,8 @@ public class JobAdminService {
         .prompt(request.prompt())
         .status(request.status() == null ? 1 : request.status())
         .build();
-    return toResponse(jobRepository.save(entity));
+    JobEntity saved = jobRepository.save(entity);
+    return toResponse(saved, loadInterviewerNames(List.of(saved)));
   }
 
   @Transactional
@@ -52,7 +62,8 @@ public class JobAdminService {
     if (request.status() != null) {
       entity.setStatus(request.status());
     }
-    return toResponse(jobRepository.save(entity));
+    JobEntity saved = jobRepository.save(entity);
+    return toResponse(saved, loadInterviewerNames(List.of(saved)));
   }
 
   @Transactional
@@ -62,7 +73,8 @@ public class JobAdminService {
     }
     JobEntity entity = findOrThrow(id);
     entity.setStatus(status);
-    return toResponse(jobRepository.save(entity));
+    JobEntity saved = jobRepository.save(entity);
+    return toResponse(saved, loadInterviewerNames(List.of(saved)));
   }
 
   @Transactional
@@ -84,10 +96,29 @@ public class JobAdminService {
     }
   }
 
-  private JobResponse toResponse(JobEntity e) {
+  private Map<Long, String> loadInterviewerNames(List<JobEntity> jobs) {
+    Set<Long> ids = jobs.stream()
+        .map(JobEntity::getInterviewerConfigId)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toSet());
+    if (ids.isEmpty()) {
+      return Map.of();
+    }
+    Map<Long, String> map = new HashMap<>();
+    for (InterviewerConfigEntity config : interviewerConfigRepository.findAllById(ids)) {
+      map.put(config.getId(), config.getAiName());
+    }
+    return map;
+  }
+
+  private JobResponse toResponse(JobEntity e, Map<Long, String> interviewerNames) {
+    String interviewerName = e.getInterviewerConfigId() == null
+        ? null
+        : interviewerNames.get(e.getInterviewerConfigId());
     return new JobResponse(
         e.getId(), e.getJobName(), e.getJobDesc(), e.getStatus(),
-        e.getInterviewerConfigId(), e.getPrompt(), e.getCreatedAt(), e.getUpdatedAt()
+        e.getInterviewerConfigId(), interviewerName, e.getPrompt(),
+        e.getCreatedAt(), e.getUpdatedAt()
     );
   }
 }

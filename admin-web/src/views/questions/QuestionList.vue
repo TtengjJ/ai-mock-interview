@@ -18,7 +18,9 @@
       <el-table-column type="index" width="55" align="center" />
       <el-table-column prop="question" label="面试题" min-width="200" show-overflow-tooltip />
       <el-table-column prop="referenceAnswer" label="参考答案" min-width="220" show-overflow-tooltip />
-      <el-table-column prop="jobName" label="岗位" min-width="120" />
+      <el-table-column prop="jobName" label="岗位" min-width="120">
+        <template #default="{ row }">{{ row.jobName || '-' }}</template>
+      </el-table-column>
       <el-table-column prop="sortOrder" label="排序" width="80" align="center" />
       <el-table-column label="启用" width="90" align="center">
         <template #default="{ row }">

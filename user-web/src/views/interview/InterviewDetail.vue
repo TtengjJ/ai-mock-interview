@@ -8,10 +8,10 @@
     <template v-if="detail">
       <h2>{{ detail.jobName }} · 面试详情</h2>
       <el-descriptions :column="2" border class="mb">
-        <el-descriptions-item label="状态">{{ detail.status }}</el-descriptions-item>
-        <el-descriptions-item label="评估状态">{{ detail.evaluateStatus || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="状态">{{ sessionStatusLabel(detail.status) }}</el-descriptions-item>
+        <el-descriptions-item label="评估状态">{{ evaluateStatusLabel(detail.evaluateStatus) }}</el-descriptions-item>
         <el-descriptions-item label="总分">{{ detail.overallScore ?? '-' }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间">{{ detail.createdAt }}</el-descriptions-item>
+        <el-descriptions-item label="创建时间">{{ formatDateTime(detail.createdAt) }}</el-descriptions-item>
       </el-descriptions>
 
       <el-alert
@@ -66,6 +66,8 @@ import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { fetchSessionDetail } from '@/api'
 import type { SessionDetail } from '@/types'
+import { formatDateTime } from '@/utils/datetime'
+import { evaluateStatusLabel, sessionStatusLabel } from '@/utils/labels'
 
 const route = useRoute()
 const loading = ref(false)

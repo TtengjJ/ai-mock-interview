@@ -19,7 +19,9 @@
           {{ row.overallScore ?? '-' }}
         </template>
       </el-table-column>
-      <el-table-column prop="createdAt" label="上传时间" min-width="160" />
+      <el-table-column label="上传时间" min-width="160">
+        <template #default="{ row }">{{ formatDateTime(row.createdAt) }}</template>
+      </el-table-column>
       <el-table-column label="操作" width="160" align="center">
         <template #default="{ row }">
           <el-button link type="primary" @click="router.push(`/resumes/${row.id}`)">详情</el-button>
@@ -38,6 +40,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { deleteResume, fetchResumes } from '@/api'
 import type { ResumeListItem } from '@/types'
+import { formatDateTime } from '@/utils/datetime'
 
 const router = useRouter()
 const loading = ref(false)

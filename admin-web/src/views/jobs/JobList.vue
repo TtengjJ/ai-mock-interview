@@ -17,9 +17,13 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="interviewerName" label="面试官" min-width="120" />
+      <el-table-column prop="interviewerName" label="面试官" min-width="120">
+        <template #default="{ row }">{{ row.interviewerName || '-' }}</template>
+      </el-table-column>
       <el-table-column prop="prompt" label="提示词" min-width="180" show-overflow-tooltip />
-      <el-table-column prop="createdAt" label="创建时间" min-width="160" />
+      <el-table-column label="创建时间" min-width="160">
+        <template #default="{ row }">{{ formatDateTime(row.createdAt) }}</template>
+      </el-table-column>
       <el-table-column label="操作" width="160" fixed="right" align="center">
         <template #default="{ row }">
           <el-button link type="primary" @click="router.push(`/jobs/${row.id}/edit`)">
@@ -38,6 +42,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { deleteJob, fetchJobs, toggleJobStatus } from '@/api'
 import type { JobItem } from '@/types'
+import { formatDateTime } from '@/utils/datetime'
 
 const router = useRouter()
 const loading = ref(false)
@@ -55,7 +60,7 @@ async function loadData() {
 }
 
 async function onToggle(row: JobItem, enabled: boolean) {
-  const status = enabled ? 1 : 0
+  const status = enabled ? 1 : 2
   try {
     await toggleJobStatus(row.id, status)
     row.status = status

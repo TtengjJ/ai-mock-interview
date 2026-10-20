@@ -29,6 +29,7 @@ public final class AdminDtos {
       String jobDesc,
       Integer status,
       Long interviewerConfigId,
+      String interviewerName,
       String prompt,
       LocalDateTime createdAt,
       LocalDateTime updatedAt
@@ -48,6 +49,7 @@ public final class AdminDtos {
   public record QuestionResponse(
       Long id,
       Long jobId,
+      String jobName,
       String question,
       String referenceAnswer,
       Integer isOn,
@@ -74,6 +76,7 @@ public final class AdminDtos {
       String email,
       Integer sex,
       Long jobId,
+      String jobName,
       String remark,
       LocalDateTime createdAt,
       LocalDateTime updatedAt

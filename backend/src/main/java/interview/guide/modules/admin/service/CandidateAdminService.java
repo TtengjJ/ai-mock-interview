@@ -5,6 +5,7 @@ import interview.guide.common.exception.ErrorCode;
 import interview.guide.modules.admin.model.AdminDtos.CandidateRequest;
 import interview.guide.modules.admin.model.AdminDtos.CandidateResponse;
 import interview.guide.modules.admin.model.CandidateEntity;
+import interview.guide.modules.admin.model.JobEntity;
 import interview.guide.modules.admin.repository.CandidateRepository;
 import interview.guide.modules.admin.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +30,14 @@ public class CandidateAdminService {
   private final PasswordEncoder passwordEncoder;
 
   public List<CandidateResponse> list() {
-    return candidateRepository.findAll().stream().map(this::toResponse).toList();
+    List<CandidateEntity> all = candidateRepository.findAll();
+    Map<Long, String> jobNames = loadJobNames(all);
+    return all.stream().map(e -> toResponse(e, jobNames)).toList();
   }
 
   public CandidateResponse get(Long id) {
-    return toResponse(findOrThrow(id));
+    CandidateEntity entity = findOrThrow(id);
+    return toResponse(entity, loadJobNames(List.of(entity)));
   }
 
   @Transactional
@@ -49,7 +58,8 @@ public class CandidateAdminService {
         .jobId(request.jobId())
         .remark(request.remark())
         .build();
-    return toResponse(candidateRepository.save(entity));
+    CandidateEntity saved = candidateRepository.save(entity);
+    return toResponse(saved, loadJobNames(List.of(saved)));
   }
 
   @Transactional
@@ -71,7 +81,8 @@ public class CandidateAdminService {
     }
     entity.setJobId(request.jobId());
     entity.setRemark(request.remark());
-    return toResponse(candidateRepository.save(entity));
+    CandidateEntity saved = candidateRepository.save(entity);
+    return toResponse(saved, loadJobNames(List.of(saved)));
   }
 
   @Transactional
@@ -93,10 +104,26 @@ public class CandidateAdminService {
     }
   }
 
-  private CandidateResponse toResponse(CandidateEntity e) {
+  private Map<Long, String> loadJobNames(List<CandidateEntity> candidates) {
+    Set<Long> ids = candidates.stream()
+        .map(CandidateEntity::getJobId)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toSet());
+    if (ids.isEmpty()) {
+      return Map.of();
+    }
+    Map<Long, String> map = new HashMap<>();
+    for (JobEntity job : jobRepository.findAllById(ids)) {
+      map.put(job.getId(), job.getJobName());
+    }
+    return map;
+  }
+
+  private CandidateResponse toResponse(CandidateEntity e, Map<Long, String> jobNames) {
+    String jobName = e.getJobId() == null ? null : jobNames.get(e.getJobId());
     return new CandidateResponse(
         e.getId(), e.getRealName(), e.getMobile(), e.getEmail(), e.getSex(),
-        e.getJobId(), e.getRemark(), e.getCreatedAt(), e.getUpdatedAt()
+        e.getJobId(), jobName, e.getRemark(), e.getCreatedAt(), e.getUpdatedAt()
     );
   }
 }

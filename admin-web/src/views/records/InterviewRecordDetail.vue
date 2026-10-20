@@ -10,10 +10,10 @@
       <el-descriptions :column="2" border class="mb">
         <el-descriptions-item label="候选人">{{ detail.candidateName }}</el-descriptions-item>
         <el-descriptions-item label="岗位">{{ detail.jobName }}</el-descriptions-item>
-        <el-descriptions-item label="状态">{{ detail.status }}</el-descriptions-item>
-        <el-descriptions-item label="评估">{{ detail.evaluateStatus || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="状态">{{ sessionStatusLabel(detail.status) }}</el-descriptions-item>
+        <el-descriptions-item label="评估">{{ evaluateStatusLabel(detail.evaluateStatus) }}</el-descriptions-item>
         <el-descriptions-item label="总分">{{ detail.overallScore ?? '-' }}</el-descriptions-item>
-        <el-descriptions-item label="创建时间">{{ detail.createdAt }}</el-descriptions-item>
+        <el-descriptions-item label="创建时间">{{ formatDateTime(detail.createdAt) }}</el-descriptions-item>
       </el-descriptions>
 
       <template v-if="detail.overallFeedback">
@@ -54,6 +54,8 @@ import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { fetchInterviewRecordDetail } from '@/api'
 import type { InterviewRecordItem } from '@/types'
+import { formatDateTime } from '@/utils/datetime'
+import { evaluateStatusLabel, sessionStatusLabel } from '@/utils/labels'
 
 const route = useRoute()
 const loading = ref(false)

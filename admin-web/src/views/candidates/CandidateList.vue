@@ -19,9 +19,13 @@
           <el-tag v-else type="info">保密</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="jobName" label="面试岗位" min-width="140" />
+      <el-table-column prop="jobName" label="面试岗位" min-width="140">
+        <template #default="{ row }">{{ row.jobName || '-' }}</template>
+      </el-table-column>
       <el-table-column prop="remark" label="备注" min-width="140" show-overflow-tooltip />
-      <el-table-column prop="createdAt" label="创建时间" min-width="160" />
+      <el-table-column label="创建时间" min-width="160">
+        <template #default="{ row }">{{ formatDateTime(row.createdAt) }}</template>
+      </el-table-column>
       <el-table-column label="操作" width="160" fixed="right" align="center">
         <template #default="{ row }">
           <el-button link type="primary" @click="router.push(`/candidates/${row.id}/edit`)">
@@ -40,6 +44,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { deleteCandidate, fetchCandidates } from '@/api'
 import type { CandidateItem } from '@/types'
+import { formatDateTime } from '@/utils/datetime'
 
 const router = useRouter()
 const loading = ref(false)

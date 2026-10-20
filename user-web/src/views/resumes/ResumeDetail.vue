@@ -36,7 +36,7 @@
         <el-descriptions-item label="总分">
           <span class="score">{{ analysis?.overallScore ?? '-' }}</span>
         </el-descriptions-item>
-        <el-descriptions-item label="上传时间">{{ detail.createdAt || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="上传时间">{{ formatDateTime(detail.createdAt) }}</el-descriptions-item>
         <el-descriptions-item label="综合评语" :span="2">
           {{ analysis?.summary || '暂无' }}
         </el-descriptions-item>
@@ -73,6 +73,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { deleteResume, fetchResumeDetail } from '@/api'
 import type { ResumeDetail, SuggestionItem } from '@/types'
+import { formatDateTime } from '@/utils/datetime'
 
 const route = useRoute()
 const router = useRouter()

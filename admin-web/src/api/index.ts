@@ -126,7 +126,7 @@ export async function deleteQuestion(id: number) {
 }
 
 export async function toggleQuestion(id: number, isOn: number) {
-  const { data } = await request.patch<Result<QuestionItem>>(`/api/admin/questions/${id}/status`, {
+  const { data } = await request.patch<Result<QuestionItem>>(`/api/admin/questions/${id}/isOn`, {
     isOn,
   })
   return unwrap(data)

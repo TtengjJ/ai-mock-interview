@@ -7,10 +7,16 @@
     <el-table :data="list" border stripe v-loading="loading">
       <el-table-column prop="id" label="ID" width="70" />
       <el-table-column prop="jobName" label="岗位" min-width="140" />
-      <el-table-column prop="status" label="状态" width="120" />
-      <el-table-column prop="evaluateStatus" label="评估" width="110" />
+      <el-table-column label="状态" width="120">
+        <template #default="{ row }">{{ sessionStatusLabel(row.status) }}</template>
+      </el-table-column>
+      <el-table-column label="评估" width="110">
+        <template #default="{ row }">{{ evaluateStatusLabel(row.evaluateStatus) }}</template>
+      </el-table-column>
       <el-table-column prop="overallScore" label="总分" width="80" align="center" />
-      <el-table-column prop="createdAt" label="创建时间" min-width="160" />
+      <el-table-column label="创建时间" min-width="160">
+        <template #default="{ row }">{{ formatDateTime(row.createdAt) }}</template>
+      </el-table-column>
       <el-table-column label="操作" width="100" fixed="right">
         <template #default="{ row }">
           <el-button link type="primary" @click="$router.push(`/interview/history/${row.id}`)">
@@ -27,6 +33,8 @@ import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { fetchMySessions } from '@/api'
 import type { SessionSummary } from '@/types'
+import { formatDateTime } from '@/utils/datetime'
+import { evaluateStatusLabel, sessionStatusLabel } from '@/utils/labels'
 
 const loading = ref(false)
 const list = ref<SessionSummary[]>([])

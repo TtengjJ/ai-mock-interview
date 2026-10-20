@@ -4,6 +4,7 @@ import interview.guide.common.exception.BusinessException;
 import interview.guide.common.exception.ErrorCode;
 import interview.guide.modules.admin.model.AdminDtos.QuestionRequest;
 import interview.guide.modules.admin.model.AdminDtos.QuestionResponse;
+import interview.guide.modules.admin.model.JobEntity;
 import interview.guide.modules.admin.model.QuestionLibEntity;
 import interview.guide.modules.admin.repository.JobRepository;
 import interview.guide.modules.admin.repository.QuestionLibRepository;
@@ -11,7 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +30,13 @@ public class QuestionAdminService {
     List<QuestionLibEntity> list = jobId == null
         ? questionLibRepository.findAll()
         : questionLibRepository.findByJobIdOrderBySortOrderAscIdAsc(jobId);
-    return list.stream().map(this::toResponse).toList();
+    Map<Long, String> jobNames = loadJobNames(list);
+    return list.stream().map(e -> toResponse(e, jobNames)).toList();
   }
 
   public QuestionResponse get(Long id) {
-    return toResponse(findOrThrow(id));
+    QuestionLibEntity entity = findOrThrow(id);
+    return toResponse(entity, loadJobNames(List.of(entity)));
   }
 
   @Transactional
@@ -41,7 +49,8 @@ public class QuestionAdminService {
         .isOn(request.isOn() == null ? 1 : request.isOn())
         .sortOrder(request.sortOrder() == null ? 0 : request.sortOrder())
         .build();
-    return toResponse(questionLibRepository.save(entity));
+    QuestionLibEntity saved = questionLibRepository.save(entity);
+    return toResponse(saved, loadJobNames(List.of(saved)));
   }
 
   @Transactional
@@ -57,7 +66,8 @@ public class QuestionAdminService {
     if (request.sortOrder() != null) {
       entity.setSortOrder(request.sortOrder());
     }
-    return toResponse(questionLibRepository.save(entity));
+    QuestionLibEntity saved = questionLibRepository.save(entity);
+    return toResponse(saved, loadJobNames(List.of(saved)));
   }
 
   @Transactional
@@ -67,7 +77,8 @@ public class QuestionAdminService {
     }
     QuestionLibEntity entity = findOrThrow(id);
     entity.setIsOn(isOn);
-    return toResponse(questionLibRepository.save(entity));
+    QuestionLibEntity saved = questionLibRepository.save(entity);
+    return toResponse(saved, loadJobNames(List.of(saved)));
   }
 
   @Transactional
@@ -89,10 +100,26 @@ public class QuestionAdminService {
     }
   }
 
-  private QuestionResponse toResponse(QuestionLibEntity e) {
+  private Map<Long, String> loadJobNames(List<QuestionLibEntity> questions) {
+    Set<Long> ids = questions.stream()
+        .map(QuestionLibEntity::getJobId)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toSet());
+    if (ids.isEmpty()) {
+      return Map.of();
+    }
+    Map<Long, String> map = new HashMap<>();
+    for (JobEntity job : jobRepository.findAllById(ids)) {
+      map.put(job.getId(), job.getJobName());
+    }
+    return map;
+  }
+
+  private QuestionResponse toResponse(QuestionLibEntity e, Map<Long, String> jobNames) {
     return new QuestionResponse(
-        e.getId(), e.getJobId(), e.getQuestion(), e.getReferenceAnswer(),
-        e.getIsOn(), e.getSortOrder(), e.getCreatedAt(), e.getUpdatedAt()
+        e.getId(), e.getJobId(), jobNames.get(e.getJobId()), e.getQuestion(),
+        e.getReferenceAnswer(), e.getIsOn(), e.getSortOrder(),
+        e.getCreatedAt(), e.getUpdatedAt()
     );
   }
 }

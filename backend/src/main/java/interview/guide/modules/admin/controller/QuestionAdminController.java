@@ -48,7 +48,7 @@ public class QuestionAdminController {
     return Result.success(questionAdminService.update(id, request));
   }
 
-  @PatchMapping("/{id}/isOn")
+  @PatchMapping({"/{id}/isOn", "/{id}/status"})
   public Result<QuestionResponse> updateIsOn(
       @PathVariable Long id, @Valid @RequestBody QuestionOnRequest request) {
     return Result.success(questionAdminService.updateIsOn(id, request.isOn()));

@@ -1,0 +1,713 @@
+{
+  "meta": {
+    "base": "http://localhost:8080",
+    "stamp": "20261012163222",
+    "os": "Windows 11"
+  },
+  "6.1.1_empty_api": {
+    "code": 400,
+    "message": "密码不能为空, 用户名不能为空",
+    "note": "API Bean 校验；前端另有「请输入用户名/请输入密码」",
+    "frontend_hint": "请输入用户名 / 请输入密码"
+  },
+  "6.1.2_bad_user": {
+    "code": 9001,
+    "message": "用户名或密码错误"
+  },
+  "6.1.3_bad_pass": {
+    "code": 9001,
+    "message": "用户名或密码错误"
+  },
+  "6.1.4_ok": {
+    "code": 200,
+    "message": "success",
+    "has_token": true,
+    "realName": "系统管理员"
+  },
+  "6.1.5_no_token": {
+    "code": 9002,
+    "message": "登录已失效，请重新登录"
+  },
+  "6.2.1_create_config": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 4,
+      "aiName": "测试人设-20261012163222",
+      "systemPrompt": "你是严格但友善的技术面试官，输出结构化评估。",
+      "createdAt": "2026-10-12T16:32:23.1248352",
+      "updatedAt": "2026-10-12T16:32:23.1248352"
+    }
+  },
+  "6.2.2_create_job": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 5,
+      "jobName": "测试岗位-20261012163222",
+      "jobDesc": "论文测试岗位",
+      "status": 1,
+      "interviewerConfigId": 4,
+      "interviewerName": "测试人设-20261012163222",
+      "prompt": "评估 Java 基础与表达。",
+      "createdAt": "2026-10-12T16:32:23.1447615",
+      "updatedAt": "2026-10-12T16:32:23.1447615"
+    }
+  },
+  "6.2.2_user_sees_job": {
+    "code": 200,
+    "message": "success",
+    "has_token": true
+  },
+  "6.2.2_open_jobs_contains": {
+    "code": 200,
+    "message": "success",
+    "contains": true,
+    "open_ids": [
+      5,
+      4,
+      3,
+      2,
+      1
+    ]
+  },
+  "6.2.3_close_job": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 5,
+      "jobName": "测试岗位-20261012163222",
+      "jobDesc": "论文测试岗位",
+      "status": 2,
+      "interviewerConfigId": 4,
+      "interviewerName": "测试人设-20261012163222",
+      "prompt": "评估 Java 基础与表达。",
+      "createdAt": "2026-10-12T16:32:23.144762",
+      "updatedAt": "2026-10-12T16:32:23.254917"
+    }
+  },
+  "6.2.3_user_hidden": {
+    "code": 200,
+    "contains": false,
+    "open_ids": [
+      4,
+      3,
+      2,
+      1
+    ]
+  },
+  "6.2.4_add_question": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 11,
+      "jobId": 5,
+      "jobName": "测试岗位-20261012163222",
+      "question": "测试题-20261012163222：请介绍 HashMap？",
+      "referenceAnswer": "哈希表、扩容、线程安全差异等。",
+      "isOn": 1,
+      "sortOrder": 1,
+      "createdAt": "2026-10-12T16:32:23.2955619",
+      "updatedAt": "2026-10-12T16:32:23.2955619"
+    }
+  },
+  "6.2.5_disable_question": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 11,
+      "jobId": 5,
+      "jobName": "测试岗位-20261012163222",
+      "question": "测试题-20261012163222：请介绍 HashMap？",
+      "referenceAnswer": "哈希表、扩容、线程安全差异等。",
+      "isOn": 0,
+      "sortOrder": 1,
+      "createdAt": "2026-10-12T16:32:23.295562",
+      "updatedAt": "2026-10-12T16:32:23.3217239"
+    },
+    "raw": "{\"code\":200,\"data\":{\"id\":11,\"jobId\":5,\"jobName\":\"测试岗位-20261012163222\",\"question\":\"测试题-20261012163222：请介绍 HashMap？\",\"referenceAnswer\":\"哈希表、扩容、线程安全差异等。\",\"isOn\":0,\"sortOrder\":1,\"createdAt\":\"2026-10-12T16:32:23.295562\",\"updatedAt\":\"2026-10-12T16:32:23.3217239\"},\"message\":\"success\",\"success\":true}"
+  },
+  "6.2.5_is_on_value": {
+    "isOn": 0
+  },
+  "6.2.6_create_candidate": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 5,
+      "realName": "测试候选人-20261012163222",
+      "mobile": "13912163222",
+      "email": null,
+      "sex": 1,
+      "jobId": null,
+      "jobName": null,
+      "remark": null,
+      "createdAt": "2026-10-12T16:32:23.4632369",
+      "updatedAt": "2026-10-12T16:32:23.4632369"
+    },
+    "mobile": "13912163222"
+  },
+  "6.2.6_login_new": {
+    "code": 200,
+    "message": "success",
+    "has_token": true
+  },
+  "6.3.1_bad_login": {
+    "code": 9001,
+    "message": "用户名或密码错误"
+  },
+  "6.3.2_ok_login": {
+    "code": 200,
+    "message": "success",
+    "candidateId": 1,
+    "has_token": true
+  },
+  "6.3.3_cand_to_admin": {
+    "code": 403,
+    "message": "无权访问该资源"
+  },
+  "6.3.4_cand_b_login": {
+    "code": 200,
+    "candidateId": 2
+  },
+  "6.3.4_cross_session": {
+    "code": 3001,
+    "message": "面试会话不存在",
+    "sid_b": 15,
+    "create_b": "success",
+    "create_code": 200
+  },
+  "6.3.5_admin_to_resumes": {
+    "code": 403,
+    "message": "无权访问该资源"
+  },
+  "6.3.5_admin_to_interview": {
+    "code": 403,
+    "message": "无权访问该资源"
+  },
+  "6.4.1_upload": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "resumeId": 3,
+      "fileName": "resume-20261012163222.txt",
+      "analyzeStatus": "PENDING",
+      "duplicate": false
+    },
+    "analyzeStatus": "PENDING"
+  },
+  "6.4.2_analyze_done": {
+    "analyzeStatus": "COMPLETED",
+    "detail_keys": [
+      "id",
+      "fileName",
+      "analyzeStatus",
+      "analyzeError",
+      "createdAt",
+      "analysis"
+    ],
+    "detail": {
+      "id": 3,
+      "fileName": "resume-20261012163222.txt",
+      "analyzeStatus": "COMPLETED",
+      "analyzeError": null,
+      "createdAt": "2026-10-12T16:32:40.11303",
+      "analysis": {
+        "overallScore": 62,
+        "summary": "基础技术栈具备但缺乏深度和量化成果展示的应届Java后端候选人",
+        "strengths": [
+          "掌握主流Java后端技术栈",
+          "有实际项目开发经验"
+        ],
+        "suggestions": [
+          "补充项目中具体技术难点、个人贡献及可量化的成果（如QPS提升、响应时间优化等）",
+          "完善教育经历中的毕业时间、GPA或相关课程/奖项信息"
+        ],
+        "analyzedAt": "2026-10-12T16:32:42.916581"
+      }
+    }
+  },
+  "6.4.3_duplicate": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "resumeId": 3,
+      "fileName": "resume-20261012163222.txt",
+      "analyzeStatus": "COMPLETED",
+      "duplicate": true
+    },
+    "duplicated": null
+  },
+  "6.4.4_empty": {
+    "code": 400,
+    "message": "请上传简历文件"
+  },
+  "6.4.4_bad_ext": {
+    "code": 2006,
+    "message": "仅支持 pdf/doc/docx/txt 格式"
+  },
+  "6.4.5_invalid_key": {
+    "skipped": true,
+    "note": "未执行（可选负例）"
+  },
+  "6.5.1_create": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 16,
+      "candidateId": 1,
+      "candidateName": "张同学",
+      "jobId": 1,
+      "jobName": "Java后端开发（校招）",
+      "resumeId": 3,
+      "status": "IN_PROGRESS",
+      "evaluateStatus": null,
+      "evaluateError": null,
+      "overallScore": null,
+      "overallFeedback": null,
+      "strengths": [],
+      "improvements": [],
+      "totalQuestions": 5,
+      "currentIndex": 0,
+      "questions": [
+        {
+          "questionIndex": 0,
+          "questionText": "请解释 Java 中 == 与 equals 的区别，并举一个业务场景。",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 1,
+          "questionText": "MySQL 索引失效的常见原因有哪些？",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 2,
+          "questionText": "Redis 适合做什么？不适合做什么？请结合面试系统举例。",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 3,
+          "questionText": "如何设计一个「面试会话」表结构的核心字段？",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 4,
+          "questionText": "在 Spring Boot 项目中，若一个高频查询接口（如获取用户基础信息）存在数据库压力大、响应慢问题，且已确认 SQL 已加索引、无 N+1 查询，你会如何系统性地定位瓶颈并设计优化方案？请结合 Java 基础（如线程/对象生命周期）、Spring（如 Bean 作用域、@Cacheable）、MySQL（查询执行计划、连接池配置）、Redis（缓存策略与一致性）及接口设计（幂等、DTO 分层）说明关键步骤与取舍依据。",
+          "source": "LLM",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        }
+      ],
+      "createdAt": "2026-10-12T16:32:43.210313",
+      "completedAt": null
+    }
+  },
+  "6.5.1_detail": {
+    "status": "IN_PROGRESS",
+    "totalQuestions": 5,
+    "q_count": 5
+  },
+  "6.5.3_followup_no_answer": {
+    "code": 3009,
+    "message": "请先提交本题作答"
+  },
+  "6.5.3_next_no_answer": {
+    "code": 3009,
+    "message": "请先提交本题作答"
+  },
+  "6.5.7_complete_no_answer": {
+    "code": 3009,
+    "message": "至少回答一题后再结束"
+  },
+  "6.5.2_answer": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 16,
+      "candidateId": 1,
+      "candidateName": "张同学",
+      "jobId": 1,
+      "jobName": "Java后端开发（校招）",
+      "resumeId": 3,
+      "status": "IN_PROGRESS",
+      "evaluateStatus": null,
+      "evaluateError": null,
+      "overallScore": null,
+      "overallFeedback": null,
+      "strengths": [],
+      "improvements": [],
+      "totalQuestions": 5,
+      "currentIndex": 0,
+      "questions": [
+        {
+          "questionIndex": 0,
+          "questionText": "请解释 Java 中 == 与 equals 的区别，并举一个业务场景。",
+          "source": "BANK",
+          "answerText": "这是我的第一题作答，包含 equals 与 == 的区别说明。",
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": true,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 1,
+          "questionText": "MySQL 索引失效的常见原因有哪些？",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 2,
+          "questionText": "Redis 适合做什么？不适合做什么？请结合面试系统举例。",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 3,
+          "questionText": "如何设计一个「面试会话」表结构的核心字段？",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 4,
+          "questionText": "在 Spring Boot 项目中，若一个高频查询接口（如获取用户基础信息）存在数据库压力大、响应慢问题，且已确认 SQL 已加索引、无 N+1 查询，你会如何系统性地定位瓶颈并设计优化方案？请结合 Java 基础（如线程/对象生命周期）、Spring（如 Bean 作用域、@Cacheable）、MySQL（查询执行计划、连接池配置）、Redis（缓存策略与一致性）及接口设计（幂等、DTO 分层）说明关键步骤与取舍依据。",
+          "source": "LLM",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        }
+      ],
+      "createdAt": "2026-10-12T16:32:43.210313",
+      "completedAt": null
+    }
+  },
+  "6.5.2_answer_dup": {
+    "code": 400,
+    "message": "本题已作答，请生成追问或进入下一题"
+  },
+  "6.5.4_followup": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 16,
+      "candidateId": 1,
+      "candidateName": "张同学",
+      "jobId": 1,
+      "jobName": "Java后端开发（校招）",
+      "resumeId": 3,
+      "status": "IN_PROGRESS",
+      "evaluateStatus": null,
+      "evaluateError": null,
+      "overallScore": null,
+      "overallFeedback": null,
+      "strengths": [],
+      "improvements": [],
+      "totalQuestions": 5,
+      "currentIndex": 0,
+      "questions": [
+        {
+          "questionIndex": 0,
+          "questionText": "请解释 Java 中 == 与 equals 的区别，并举一个业务场景。",
+          "source": "BANK",
+          "answerText": "这是我的第一题作答，包含 equals 与 == 的区别说明。",
+          "followUpQuestion": "你提到业务场景中用 equals 比较字符串内容，那如果两个 String 对象是通过 new String(\"abc\") 创建的，用 == 判断会返回 true 还是 false？为什么？",
+          "followUpAnswer": null,
+          "answered": true,
+          "followUpGenerated": true,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 1,
+          "questionText": "MySQL 索引失效的常见原因有哪些？",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 2,
+          "questionText": "Redis 适合做什么？不适合做什么？请结合面试系统举例。",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 3,
+          "questionText": "如何设计一个「面试会话」表结构的核心字段？",
+          "source": "BANK",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 4,
+          "questionText": "在 Spring Boot 项目中，若一个高频查询接口（如获取用户基础信息）存在数据库压力大、响应慢问题，且已确认 SQL 已加索引、无 N+1 查询，你会如何系统性地定位瓶颈并设计优化方案？请结合 Java 基础（如线程/对象生命周期）、Spring（如 Bean 作用域、@Cacheable）、MySQL（查询执行计划、连接池配置）、Redis（缓存策略与一致性）及接口设计（幂等、DTO 分层）说明关键步骤与取舍依据。",
+          "source": "LLM",
+          "answerText": null,
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": false,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        }
+      ],
+      "createdAt": "2026-10-12T16:32:43.210313",
+      "completedAt": null
+    }
+  },
+  "6.5.4_next_before_follow_answer": {
+    "code": 400,
+    "message": "请先完成追问作答"
+  },
+  "6.5.4_follow_answer": {
+    "code": 200,
+    "message": "success"
+  },
+  "6.5.5_next_flow": {
+    "indices": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "last_fail_code": 400,
+    "last_fail_message": "已是最后一题，请结束面试",
+    "final_next_success": false,
+    "final_next_message": "已是最后一题，请结束面试"
+  },
+  "6.5.6_complete": {
+    "code": 200,
+    "message": "success",
+    "data": {
+      "id": 16,
+      "candidateId": 1,
+      "candidateName": "张同学",
+      "jobId": 1,
+      "jobName": "Java后端开发（校招）",
+      "resumeId": 3,
+      "status": "COMPLETED",
+      "evaluateStatus": "PENDING",
+      "evaluateError": null,
+      "overallScore": null,
+      "overallFeedback": null,
+      "strengths": [],
+      "improvements": [],
+      "totalQuestions": 5,
+      "currentIndex": 4,
+      "questions": [
+        {
+          "questionIndex": 0,
+          "questionText": "请解释 Java 中 == 与 equals 的区别，并举一个业务场景。",
+          "source": "BANK",
+          "answerText": "这是我的第一题作答，包含 equals 与 == 的区别说明。",
+          "followUpQuestion": "你提到业务场景中用 equals 比较字符串内容，那如果两个 String 对象是通过 new String(\"abc\") 创建的，用 == 判断会返回 true 还是 false？为什么？",
+          "followUpAnswer": "追问答：补充业务场景。",
+          "answered": true,
+          "followUpGenerated": true,
+          "followUpAnswered": true
+        },
+        {
+          "questionIndex": 1,
+          "questionText": "MySQL 索引失效的常见原因有哪些？",
+          "source": "BANK",
+          "answerText": "第1题作答内容，说明原理与实践。",
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": true,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 2,
+          "questionText": "Redis 适合做什么？不适合做什么？请结合面试系统举例。",
+          "source": "BANK",
+          "answerText": "第2题作答内容，说明原理与实践。",
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": true,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 3,
+          "questionText": "如何设计一个「面试会话」表结构的核心字段？",
+          "source": "BANK",
+          "answerText": "第3题作答内容，说明原理与实践。",
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": true,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        },
+        {
+          "questionIndex": 4,
+          "questionText": "在 Spring Boot 项目中，若一个高频查询接口（如获取用户基础信息）存在数据库压力大、响应慢问题，且已确认 SQL 已加索引、无 N+1 查询，你会如何系统性地定位瓶颈并设计优化方案？请结合 Java 基础（如线程/对象生命周期）、Spring（如 Bean 作用域、@Cacheable）、MySQL（查询执行计划、连接池配置）、Redis（缓存策略与一致性）及接口设计（幂等、DTO 分层）说明关键步骤与取舍依据。",
+          "source": "LLM",
+          "answerText": "第4题作答内容，说明原理与实践。",
+          "followUpQuestion": null,
+          "followUpAnswer": null,
+          "answered": true,
+          "followUpGenerated": false,
+          "followUpAnswered": false
+        }
+      ],
+      "createdAt": "2026-10-12T16:32:43.210313",
+      "completedAt": "2026-10-12T16:33:03.4271139"
+    }
+  },
+  "6.6.1_full_bank": {
+    "code": 200,
+    "message": "success",
+    "note": "首次实测 job1 仅 4 道启用题故出现 LLM；补足启用题至≥5 后重测",
+    "sources": [
+      "BANK",
+      "BANK",
+      "BANK",
+      "BANK",
+      "BANK"
+    ],
+    "all_bank": true
+  },
+  "6.6.2_mixed": {
+    "code": 200,
+    "message": "success",
+    "sources": [
+      "BANK",
+      "BANK",
+      "BANK",
+      "LLM",
+      "LLM"
+    ],
+    "has_bank": true,
+    "has_llm": true
+  },
+  "6.6.3_all_llm": {
+    "code": 200,
+    "message": "success",
+    "sources": [
+      "LLM",
+      "LLM",
+      "LLM",
+      "LLM",
+      "LLM"
+    ],
+    "all_llm": true,
+    "raw_err": null
+  },
+  "6.6.4_llm_fail": {
+    "skipped": true,
+    "note": "未执行（可选负例）"
+  },
+  "6.7.1_eval_done": {
+    "status": "EVALUATED",
+    "overallScore": 72,
+    "has_feedback": true,
+    "data_keys": [
+      "id",
+      "candidateId",
+      "candidateName",
+      "jobId",
+      "jobName",
+      "resumeId",
+      "status",
+      "evaluateStatus",
+      "evaluateError",
+      "overallScore",
+      "overallFeedback",
+      "strengths",
+      "improvements",
+      "totalQuestions",
+      "currentIndex",
+      "questions",
+      "createdAt",
+      "completedAt"
+    ]
+  },
+  "6.7.2_user_detail": {
+    "code": 200,
+    "status": "EVALUATED",
+    "overallScore": 72,
+    "has_strengths": true,
+    "has_improvements": true,
+    "sources": [
+      "BANK",
+      "BANK",
+      "BANK",
+      "BANK",
+      "LLM"
+    ]
+  },
+  "6.7.3_admin_detail": {
+    "code": 200,
+    "message": "success",
+    "overallScore": 72,
+    "score_match": true,
+    "comment_match": true,
+    "candidateName": "张同学",
+    "jobName": "Java后端开发（校招）"
+  },
+  "6.7.4_eval_fail": {
+    "skipped": true,
+    "note": "未执行（可选负例）"
+  },
+  "6.8_async_sync": {
+    "skipped": true,
+    "note": "未执行（可选实验）"
+  }
+}
